@@ -1,0 +1,64 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+.app-header__inner {
+  display: flex;
+  height: 3.5rem;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-inline: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .app-header__inner {
+    height: 4rem;
+    padding-inline: var(--space-6);
+  }
+}
+
+.app-header__logo {
+  flex-shrink: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-brand);
+  text-decoration: none;
+}
+
+.app-header__logo:hover {
+  color: var(--color-brand-hover);
+}
+
+.app-header__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.app-header__spinner-slot {
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-header__spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-brand);
+  animation: spinner-rotate 1s linear infinite;
+}
+
+.app-header__spinner--hidden {
+  visibility: hidden;
+}
