@@ -15,10 +15,12 @@
 }
 
 .catalog__grid {
+  margin-top: 100px;
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: var(--space-4);
-  align-items: start;
+  align-items: stretch;
+  gap: 70px var(--space-4);
 }
 
 @media (min-width: 420px) {
@@ -30,14 +32,13 @@
 @media (min-width: 640px) {
   .catalog__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-4);
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .catalog__grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-6);
+    gap:70px var(--space-6);
   }
 }
 

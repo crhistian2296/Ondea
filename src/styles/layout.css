@@ -6,14 +6,15 @@
   padding-block: var(--space-6);
 }
 
-.container.catalog {
-  max-width: 61.25rem;
-}
-
 @media (min-width: 640px) {
   .container {
-    padding-inline: var(--space-6);
     padding-block: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: var(--space-6);
   }
 }
 

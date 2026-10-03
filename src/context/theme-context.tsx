@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useSyncExternalStore,
   type ReactNode,
@@ -78,8 +78,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     getThemeServerSnapshot,
   );
 
-  useEffect(() => {
-    applyThemeClass(theme);
+  useLayoutEffect(() => {
+    applyThemeClass(readStoredTheme());
   }, [theme]);
 
   const setTheme = useCallback((next: Theme) => {

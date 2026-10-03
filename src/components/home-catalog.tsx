@@ -7,7 +7,7 @@ import { PodcastCard } from "@/components/podcast-card";
 import { useCatalog } from "@/context/catalog-context";
 import { usePodcasts } from "@/hooks/use-podcasts";
 import { filterPodcasts, uniqueGenres } from "@/lib/catalog";
-import { CATALOG_GRID_MAX_COLUMNS } from "@/lib/constants";
+import { MAX_PRIORITY_IMAGES } from "@/lib/constants";
 import type { Podcast } from "@/lib/types";
 
 export function HomeCatalog({
@@ -58,7 +58,7 @@ export function HomeCatalog({
               <PodcastCard
                 key={podcast.id}
                 podcast={podcast}
-                priority={index < CATALOG_GRID_MAX_COLUMNS}
+                priority={index < MAX_PRIORITY_IMAGES}
               />
             ))}
             {filtered.length === 0 ? (

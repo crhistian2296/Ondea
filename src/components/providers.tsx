@@ -5,9 +5,11 @@ import type { ReactNode } from "react";
 import { CatalogProvider } from "@/context/catalog-context";
 import { ThemeProvider } from "@/context/theme-context";
 import { DAY_MS } from "@/lib/constants";
-import { queryClient, queryPersister } from "@/lib/query-client";
+import { getQueryClient, queryPersister } from "@/lib/query-client";
 
 export function Providers({ children }: { children: ReactNode }) {
+  const queryClient = getQueryClient();
+
   return (
     <PersistQueryClientProvider
       client={queryClient}

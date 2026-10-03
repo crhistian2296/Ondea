@@ -2,7 +2,7 @@ export const THEME_STORAGE_KEY = "ondea-theme";
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
 /** Columnas máximas del grid del catálogo (`catalog.css`); primera fila suele ser LCP. */
-export const CATALOG_GRID_MAX_COLUMNS = 4;
+export const MAX_PRIORITY_IMAGES = 16;
 
 export const ITUNES_TOP_PODCASTS_URL =
   "https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json";
