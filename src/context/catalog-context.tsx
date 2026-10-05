@@ -12,19 +12,16 @@ import {
 type CatalogState = {
   search: string;
   genre: string;
-  isNavigating: boolean;
 };
 
 type CatalogContextValue = CatalogState & {
   setSearch: (search: string) => void;
   setGenre: (genre: string) => void;
-  setNavigating: (isNavigating: boolean) => void;
 };
 
 const initialCatalogState: CatalogState = {
   search: "",
   genre: "all",
-  isNavigating: false,
 };
 
 const CatalogContext = createContext<CatalogContextValue | null>(null);
@@ -40,18 +37,13 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, genre }));
   }, []);
 
-  const setNavigating = useCallback((isNavigating: boolean) => {
-    setState((prev) => ({ ...prev, isNavigating }));
-  }, []);
-
   const value = useMemo(
     () => ({
       ...state,
       setSearch,
       setGenre,
-      setNavigating,
     }),
-    [state, setSearch, setGenre, setNavigating],
+    [state, setSearch, setGenre],
   );
 
   return (

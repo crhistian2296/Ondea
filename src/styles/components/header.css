@@ -38,6 +38,17 @@
   color: var(--color-brand-hover);
 }
 
+.app-header__logo-content {
+  display: flex;
+}
+  
+.app-header__logo-content svg {
+  margin-left: 5px;
+  align-self: center;
+  width: 24px;
+  height: 24px;
+}
+
 .app-header__actions {
   display: flex;
   flex-shrink: 0;
