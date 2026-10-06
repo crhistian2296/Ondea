@@ -13,8 +13,6 @@ import { THEME_STORAGE_KEY } from "@/lib";
 
 export type Theme = "light" | "dark";
 
-export { THEME_STORAGE_KEY };
-
 const themeListeners = new Set<() => void>();
 
 function subscribeToTheme(listener: () => void) {

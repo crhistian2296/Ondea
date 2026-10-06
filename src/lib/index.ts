@@ -43,13 +43,4 @@ export { loadPodcastDetail, loadPodcasts } from "./load-podcasts/load-podcasts";
 export { mapLookup, mapRssFeed } from "./mappers/mappers";
 export { getPaginationWindow } from "./pagination-window/pagination-window";
 export { getQueryClient, queryPersister } from "./query-client/query-client";
-export type {
-  Episode,
-  ItunesLabel,
-  ItunesLookupResponse,
-  ItunesLookupResult,
-  ItunesRssEntry,
-  ItunesRssFeed,
-  Podcast,
-  PodcastDetail,
-} from "./types";
+export type * from "./types";

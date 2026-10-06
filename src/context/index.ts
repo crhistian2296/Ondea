@@ -5,7 +5,6 @@ export {
 } from "./navigation-context/navigation-context";
 export {
   readStoredTheme,
-  THEME_STORAGE_KEY,
   ThemeProvider,
   useTheme,
 } from "./theme-context/theme-context";
