@@ -12,7 +12,7 @@
   text-align: center;
   text-decoration: none;
   box-shadow: var(--shadow-md);
-  transition: background-color .125s ease-in;
+  transition: background-color 0.125s ease-in;
 }
 
 .podcast-card:hover {

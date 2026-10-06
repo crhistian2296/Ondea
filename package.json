@@ -10,7 +10,9 @@
     "format": "prettier --write .",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:e2e": "playwright test && playwright test --config=playwright.error.config.ts",
+    "test:e2e:error": "playwright test --config=playwright.error.config.ts"
   },
   "dependencies": {
     "@tanstack/query-async-storage-persister": "^5.104.0",
@@ -23,6 +25,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^20",

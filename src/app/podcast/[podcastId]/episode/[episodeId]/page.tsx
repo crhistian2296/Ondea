@@ -1,5 +1,5 @@
-import { EpisodeDetailView } from "@/components/episode-detail-view";
-import { loadPodcastDetail, loadPodcasts } from "@/lib/load-podcasts";
+import { EpisodeDetailView } from "@/components";
+import { loadPodcastDetail, loadPodcasts } from "@/lib";
 
 export default async function EpisodePage({
   params,

@@ -12,7 +12,8 @@ Catálogo de los 100 podcasts musicales más populares de Apple. Se puede filtra
 | Context API              | Estado de interfaz: búsqueda, género y navegación           |
 | TanStack Query           | Caché de las respuestas de iTunes, no estado de UI          |
 | CSS propio               | Variables, BEM y media queries, sin librería de componentes |
-| Vitest + Testing Library | Dominio puro y controles del catálogo                       |
+| Vitest + Testing Library | Tests unitarios y de componentes en `src/`                  |
+| Playwright               | Tests end-to-end de los flujos de usuario en el navegador   |
 | ESLint + Prettier        | Cero alertas de lint y formato uniforme                     |
 
 Turbopack cumple el papel de Webpack: en `pnpm dev` los assets se sirven sin minificar (con recarga); `pnpm build` los concatena y minifica, y `pnpm start` sirve esa build.
@@ -81,6 +82,8 @@ La frontera entre Context y TanStack Query es deliberada. Context guarda lo que 
 
 **Listado y episodios completos.** El filtro recorre todo el catálogo y la tabla muestra todos los episodios. No hay paginación en la vista: el número del badge es el total filtrado, no el de una página.
 
+**Ventana de paginación sin UI.** En `src/lib/pagination-window/pagination-window.ts` vive `getPaginationWindow`, que calcula qué números de página mostrar en un control de paginación (ventana deslizante, por defecto `PAGINATION_WINDOW_SIZE`). También existe `paginate` en `src/lib/catalog/catalog.ts`. Se escribieron para partir el catálogo en páginas, pero al final no se usaron en la interfaz: el listado y la tabla de episodios muestran el conjunto filtrado completo para que el usuario recorra el catálogo sin cambiar de página. Los helpers siguen en el dominio y tienen tests; la fluidez de la experiencia prima sobre un paginador.
+
 **Autor, imagen y título.** En la ficha, los tres vuelven a `/podcast/{id}`. Desde un episodio se regresa al podcast sin salir a Apple.
 
 **Apariencia.** El tema claro es la referencia: fondo gris, cabecera blanca, enlace azul, badge rojo y tarjetas blancas con la imagen circular superpuesta. El tema oscuro reinterpreta esos mismos papeles (azul de enlace, rojo de badge, tarjetas sobre fondo oscuro) sin cambiar la estructura. Los dos viven en variables CSS (`src/styles/tokens.css`); los componentes no repiten hexadecimales. El toggle usa iconos de `lucide-react` y guarda la elección en `localStorage`. Por defecto se muestra el tema claro.
@@ -106,24 +109,28 @@ La frontera entre Context y TanStack Query es deliberada. Context guarda lo que 
 
 ## Caché
 
-Hay dos sitios y un mismo plazo de 24 horas (`DAY_MS` / `revalidate: 86400`).
+Hay dos sitios y un mismo plazo de 24 horas (`DAY_MS` / `DAY_SECONDS` en `revalidate`).
 
 1. **Cliente.** TanStack Query marca listado (`["podcasts"]`) y detalle (`["podcast", id]`) como frescos durante 24 h, sin refetch al enfocar la ventana. `PersistQueryClientProvider` copia esa caché a `localStorage` (`ondea-query-cache`, `maxAge` 24 h). Volver a un podcast ya abierto no espera a la red.
 2. **Servidor.** `fetch` de Next revalida la respuesta de iTunes a las 24 h. El HTML de la primera visita y los refetch del proxy reutilizan esa copia.
 
-Qué se gana: menos llamadas a una API pública que no está pensada para ser golpeada en cada navegación, vuelta instantánea a un podcast ya visto, y un primer render con datos sin un spinner obligatorio.
+Qué se gana: ahorrar llamadas a una API pública que puede tener un numero finito de peticiones al mes, vuelta instantánea a un podcast ya visto, y un primer render con datos sin un spinner obligatorio.
 
-`buster: "ondea-v4"` invalida de golpe las copias viejas de `localStorage` cuando cambia la forma de lo guardado. Subir el buster es la estrategia de invalidación; no hace falta borrar el almacenamiento a mano.
+`buster: "ondea-v4"` invalida de golpe las copias viejas de `localStorage` cuando cambia la forma de lo guardado. Subir el buster es la estrategia de invalidación; no hace falta borrar el `localstorage` a mano.
 
 `isCacheFresh` expresa la misma regla de TTL y la cubren los tests. La caducidad en runtime la aplican Query (`staleTime`) y `revalidate`, no una lectura manual en cada componente.
 
 ## Tests, lint y formato
 
+### Tests unitarios y de componentes (Vitest + Testing Library)
+
 ```bash
-pnpm test:run
-pnpm lint
-pnpm format
+pnpm test          # modo watch
+pnpm test:run      # una pasada
+pnpm test:coverage # informe con umbral mínimo del 80 %
 ```
+
+Cubren dominio (`src/lib`), hooks, context, componentes y rutas de `src/app`, con mocks de `fetch`, Next y TanStack Query donde hace falta.
 
 El filtro de dominio, que es el comportamiento que el usuario nota al escribir, se prueba sin montar React:
 
@@ -140,6 +147,22 @@ it("filters by author", () => {
 ```
 
 Los controles del toolbar tienen sus propios tests (`catalog-search-input.test.tsx`, `catalog-genre-select.test.tsx`): escribir notifica el string, y elegir un género notifica ese valor. No levantan el catálogo ni el contexto.
+
+### Tests end-to-end (Playwright)
+
+```bash
+pnpm exec playwright install chromium   # solo la primera vez
+pnpm test:e2e
+```
+
+Playwright levanta `pnpm dev` con `ONDEA_E2E_FIXTURES=1`: el servidor usa datos de prueba en `src/lib/fixtures.ts` y no llama a iTunes. Los escenarios recorren listado y filtro, ficha y episodio, tema claro/oscuro y el aviso de error con reintento en la home.
+
+### Lint y formato
+
+```bash
+pnpm lint
+pnpm format
+```
 
 ## Git
 

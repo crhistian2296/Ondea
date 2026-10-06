@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
-import { AppHeader } from "@/components/app-header";
-import { PageTransition } from "@/components/page-transition";
-import { Providers } from "@/components/providers";
-import { ThemeScript } from "@/components/theme-script";
+import {
+  AppHeader,
+  PageTransition,
+  Providers,
+  ThemeScript,
+} from "@/components";
 import "./globals.css";
 
 const roboto = Roboto({

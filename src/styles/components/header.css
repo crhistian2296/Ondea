@@ -31,7 +31,7 @@
   letter-spacing: -0.02em;
   color: var(--color-brand);
   text-decoration: none;
-  transition: color .125s ease-in;
+  transition: color 0.125s ease-in;
 }
 
 .app-header__logo:hover {
@@ -41,7 +41,7 @@
 .app-header__logo-content {
   display: flex;
 }
-  
+
 .app-header__logo-content svg {
   margin-left: 5px;
   align-self: center;
