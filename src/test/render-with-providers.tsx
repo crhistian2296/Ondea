@@ -40,8 +40,8 @@ export function renderWithProviders(
   ui: ReactElement,
   options?: RenderOptions & WrapperOptions,
 ) {
-  const queryClient = options?.queryClient ?? createTestQueryClient();
-  const { queryClient: _, ...renderOptions } = options ?? {};
+  const { queryClient: optionsQueryClient, ...renderOptions } = options ?? {};
+  const queryClient = optionsQueryClient ?? createTestQueryClient();
 
   return {
     queryClient,

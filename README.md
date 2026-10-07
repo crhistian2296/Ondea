@@ -88,7 +88,7 @@ La frontera entre Context y TanStack Query es deliberada. Context guarda lo que 
 
 **Apariencia.** El tema claro es la referencia: fondo gris, cabecera blanca, enlace azul, badge rojo y tarjetas blancas con la imagen circular superpuesta. El tema oscuro reinterpreta esos mismos papeles (azul de enlace, rojo de badge, tarjetas sobre fondo oscuro) sin cambiar la estructura. Los dos viven en variables CSS (`src/styles/tokens.css`); los componentes no repiten hexadecimales. El toggle usa iconos de `lucide-react` y guarda la elección en `localStorage`. Por defecto se muestra el tema claro.
 
-**HTML de episodios.** La descripción puede traer markup. Se sanea antes de pintarla (`isomorphic-dompurify`) para no ejecutar lo que venga en el feed.
+**HTML de episodios.** La descripción puede traer markup. Se sanea con una allowlist (sin jsdom) antes de pintarla para no ejecutar lo que venga en el feed.
 
 ## Componentes
 

@@ -47,4 +47,13 @@ describe("prepareRichDescriptionHtml", () => {
     expect(hasHtmlMarkup("<p>Hi</p>")).toBe(true);
     expect(prepareRichDescriptionHtml("<p>Hi</p>")).toContain("<p>Hi</p>");
   });
+
+  it("strips scripts and event handlers", () => {
+    const html = prepareRichDescriptionHtml(
+      `<p onclick="alert(1)">Hi</p><script>alert(2)</script>`,
+    );
+    expect(html).toContain("<p>Hi</p>");
+    expect(html).not.toContain("script");
+    expect(html).not.toContain("onclick");
+  });
 });

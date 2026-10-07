@@ -9,17 +9,17 @@ import type {
   PodcastDetail,
 } from "@/lib/types";
 
-function useE2eFixtures() {
+function areE2eFixturesEnabled() {
   return process.env.ONDEA_E2E_FIXTURES === "1";
 }
 
-function e2eFixturesShouldFail() {
+function shouldE2eFixturesFail() {
   return process.env.ONDEA_E2E_FIXTURES_FAIL === "1";
 }
 
 export async function loadPodcasts(): Promise<Podcast[]> {
-  if (useE2eFixtures()) {
-    if (e2eFixturesShouldFail()) {
+  if (areE2eFixturesEnabled()) {
+    if (shouldE2eFixturesFail()) {
       throw new Error("E2E fixtures fail mode");
     }
     return mapRssFeed(fixtureRssFeed);
@@ -32,8 +32,8 @@ export async function loadPodcasts(): Promise<Podcast[]> {
 export async function loadPodcastDetail(
   podcastId: string,
 ): Promise<PodcastDetail> {
-  if (useE2eFixtures()) {
-    if (e2eFixturesShouldFail()) {
+  if (areE2eFixturesEnabled()) {
+    if (shouldE2eFixturesFail()) {
       throw new Error("E2E fixtures fail mode");
     }
     if (podcastId !== fixturePodcastDetail.podcast.id) {

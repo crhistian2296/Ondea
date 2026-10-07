@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import Link from "next/link";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { useRouteTransitionFeedback } from "@/hooks";
 import { NavigationProvider, useNavigationUi } from "@/context";
@@ -7,6 +8,16 @@ const pathname = vi.fn(() => "/");
 
 vi.mock("next/navigation", () => ({
   usePathname: () => pathname(),
+}));
+
+vi.mock("next/link", () => ({
+  default: ({
+    href,
+    children,
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => <a href={href}>{children}</a>,
 }));
 
 function Probe() {
@@ -24,7 +35,7 @@ describe("useRouteTransitionFeedback", () => {
   it("sets navigating on internal link click", () => {
     render(
       <NavigationProvider>
-        <a href="/podcast/1">Go</a>
+        <Link href="/podcast/1">Go</Link>
         <Probe />
       </NavigationProvider>,
     );
@@ -48,7 +59,7 @@ describe("useRouteTransitionFeedback", () => {
   it("ignores same pathname", () => {
     render(
       <NavigationProvider>
-        <a href="/">Home</a>
+        <Link href="/">Home</Link>
         <Probe />
       </NavigationProvider>,
     );
