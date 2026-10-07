@@ -1,16 +1,13 @@
+import { ITUNES_TOP_PODCASTS_URL, itunesLookupUrl } from "@/lib/constants";
 import { fetchExternalJson } from "@/lib/fetch-external/fetch-external";
-import {
-  ITUNES_TOP_PODCASTS_URL,
-  itunesLookupUrl,
-  mapLookup,
-  mapRssFeed,
-  fixturePodcastDetail,
-  fixtureRssFeed,
-  type ItunesLookupResponse,
-  type ItunesRssFeed,
-  type Podcast,
-  type PodcastDetail,
-} from "@/lib";
+import { fixturePodcastDetail, fixtureRssFeed } from "@/lib/fixtures";
+import { mapLookup, mapRssFeed } from "@/lib/mappers/mappers";
+import type {
+  ItunesLookupResponse,
+  ItunesRssFeed,
+  Podcast,
+  PodcastDetail,
+} from "@/lib/types";
 
 function useE2eFixtures() {
   return process.env.ONDEA_E2E_FIXTURES === "1";

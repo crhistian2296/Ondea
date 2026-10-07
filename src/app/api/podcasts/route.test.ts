@@ -3,13 +3,9 @@ import { HTTP_BAD_GATEWAY, fixtureRssFeed } from "@/lib";
 
 const fetchExternalJson = vi.fn();
 
-vi.mock("@/lib", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/lib")>();
-  return {
-    ...actual,
-    fetchExternalJson: (...args: unknown[]) => fetchExternalJson(...args),
-  };
-});
+vi.mock("@/lib/fetch-external/fetch-external", () => ({
+  fetchExternalJson: (...args: unknown[]) => fetchExternalJson(...args),
+}));
 
 describe("GET /api/podcasts", () => {
   beforeEach(() => {

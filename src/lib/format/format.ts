@@ -1,4 +1,8 @@
-import { MS_PER_SECOND, SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "@/lib";
+import {
+  MS_PER_SECOND,
+  SECONDS_PER_HOUR,
+  SECONDS_PER_MINUTE,
+} from "@/lib/constants";
 
 export function formatDuration(ms?: number) {
   if (ms == null || Number.isNaN(ms) || ms < 0) {

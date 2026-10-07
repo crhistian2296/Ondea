@@ -4,7 +4,7 @@ import type {
   ItunesRssFeed,
   Podcast,
   PodcastDetail,
-} from "@/lib";
+} from "@/lib/types";
 
 const fixtureArtwork =
   "https://is1-ssl.mzstatic.com/image/thumb/Podcasts126/v4/e2/placeholder/art.jpg";

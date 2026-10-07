@@ -1,6 +1,6 @@
 "use client";
 
-import { prepareRichDescriptionHtml } from "@/lib";
+import { prepareRichDescriptionHtml } from "@/lib/description-html/description-html";
 
 export function RichDescription({ content }: { content: string }) {
   const html = prepareRichDescriptionHtml(content);

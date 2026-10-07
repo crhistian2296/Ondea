@@ -6,7 +6,7 @@ import type {
   ItunesRssFeed,
   Podcast,
   PodcastDetail,
-} from "@/lib";
+} from "@/lib/types";
 
 function asEntries(
   entry: ItunesRssEntry | ItunesRssEntry[] | undefined,

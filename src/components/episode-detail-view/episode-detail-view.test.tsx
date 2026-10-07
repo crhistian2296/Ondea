@@ -92,9 +92,7 @@ describe("EpisodeDetailView", () => {
   });
 
   it("retries loading after error", async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: false, status: 500 });
+    const fetchMock = vi.fn().mockResolvedValue({ ok: false, status: 500 });
     vi.stubGlobal("fetch", fetchMock);
 
     renderWithProviders(

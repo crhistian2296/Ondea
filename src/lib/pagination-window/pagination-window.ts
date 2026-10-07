@@ -1,4 +1,4 @@
-import { PAGINATION_WINDOW_SIZE } from "@/lib";
+import { PAGINATION_WINDOW_SIZE } from "@/lib/constants";
 
 export function getPaginationWindow(
   page: number,

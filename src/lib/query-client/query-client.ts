@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { QUERY_RETRY_COUNT, QUERY_TTL_MS } from "@/lib";
+import { QUERY_RETRY_COUNT, QUERY_TTL_MS } from "@/lib/constants";
 
 function makeQueryClient() {
   return new QueryClient({

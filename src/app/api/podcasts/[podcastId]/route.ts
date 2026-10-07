@@ -1,12 +1,8 @@
 import { NextResponse } from "next/server";
-import {
-  HTTP_BAD_GATEWAY,
-  itunesLookupUrl,
-  fetchExternalJson,
-  fixtureLookupResponse,
-  fixturePodcast,
-  type ItunesLookupResponse,
-} from "@/lib";
+import { HTTP_BAD_GATEWAY, itunesLookupUrl } from "@/lib/constants";
+import { fetchExternalJson } from "@/lib/fetch-external/fetch-external";
+import { fixtureLookupResponse, fixturePodcast } from "@/lib/fixtures";
+import type { ItunesLookupResponse } from "@/lib/types";
 
 export async function GET(
   _request: Request,

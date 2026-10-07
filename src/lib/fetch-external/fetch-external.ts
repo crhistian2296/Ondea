@@ -1,4 +1,4 @@
-import { allOriginsUrl, DAY_SECONDS } from "@/lib";
+import { allOriginsUrl, DAY_SECONDS } from "@/lib/constants";
 
 export async function fetchExternalJson<T>(url: string): Promise<T> {
   try {
