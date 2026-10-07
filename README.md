@@ -53,20 +53,30 @@ pnpm start
 Cada capa tiene una sola razón para cambiar.
 
 ```
-src/app            rutas y layout (Server Components)
-src/app/api        proxy HTTP hacia iTunes
-src/components     presentación
-src/hooks          lectura de datos en el cliente
-src/context        estado de interfaz
-src/lib            dominio sin React
-src/styles         CSS
+src/app                      rutas y layout (Server Components)
+src/app/api                  proxy HTTP hacia iTunes
+src/components               presentación (barrel raíz para las rutas)
+src/components/layout        cabecera, tema, providers, transición
+src/components/catalog       listado y filtros
+src/components/podcast       ficha y tabla de episodios
+src/components/episode       detalle de un episodio
+src/components/shared        piezas reutilizables entre pantallas
+src/hooks                    lectura de datos en el cliente
+src/context                  estado de interfaz
+src/lib                      dominio sin React
+src/styles                   CSS (tokens, base y grupos por pantalla)
+src/styles/layout           cabecera y toggle de tema
+src/styles/catalog          listado, filtros y tarjetas
+src/styles/podcast          ficha y tabla de episodios
+src/styles/episode          detalle de un episodio
+src/styles/shared           contenedor, botones, esqueleto, error y texto
 ```
 
 - **Dominio** (`src/lib`): tipos, mapeo del JSON de iTunes, filtro, fechas, duración y saneado de HTML. No importa React, así que se prueba sin montar la UI.
 - **Proxy** (`src/app/api`): el navegador no llama a Apple directamente. iTunes no envía CORS usable desde el origen de la app; el servidor sí puede. Si la petición directa falla, se reintenta vía allorigins.
 - **Hooks**: `usePodcasts` y `usePodcastDetail` esconden la query, la clave de caché y el mapeo. Las vistas no conocen la URL de iTunes.
 - **Context**: búsqueda, género y el flag del spinner de navegación. Es estado que el usuario cambia y que no viene del servidor.
-- **UI**: compone esas piezas. Una vista no filtra el JSON crudo ni decide el TTL.
+- **UI** (`src/components`): las rutas importan solo el barrel raíz (`HomeCatalog`, vistas de detalle, `AppHeader`, `Providers`, …). Dentro de cada carpeta de pantalla (`catalog`, `podcast`, `episode`, `layout`, `shared`) hay otro `index.ts` con la API de ese grupo. Las vistas orquestan hooks y contexto; el markup repetido vive en piezas más pequeñas. Una vista no filtra el JSON crudo ni decide el TTL.
 
 La frontera entre Context y TanStack Query es deliberada. Context guarda lo que el usuario está haciendo ahora (el texto del filtro). Query guarda lo que iTunes respondió y cuándo caduca. Mezclarlos obligaría a reimplementar deduplicación, reintentos y persistencia dentro del contexto.
 
@@ -76,7 +86,7 @@ La frontera entre Context y TanStack Query es deliberada. Context guarda lo que 
 
 **Proxy en el cliente, fetch directo en el servidor.** El refetch del navegador sigue yendo a `/api/podcasts`, donde el CORS ya está resuelto. El render de servidor llama a iTunes (o al fallback) sin dar una vuelta HTTP contra sí mismo.
 
-**Controles controlados y tontos.** `CatalogSearchInput` y `CatalogGenreSelect` no leen el contexto. Reciben valor y callback. `HomeCatalog` es el único que une contexto, filtro y grid. Así cada control se prueba sin providers, y cambiar la fuente del estado no obliga a tocar el input.
+**Controles controlados y tontos.** `CatalogSearchInput` y `CatalogGenreSelect` no leen el contexto. Reciben valor y callback. `HomeCatalog` une contexto, filtro, `CatalogToolbar` y `CatalogGrid`. Así cada control se prueba sin providers, y cambiar la fuente del estado no obliga a tocar el input.
 
 **Filtro de género.** El enunciado pide filtrar por título y autor. El select es una extensión: con `all` por defecto ese filtro sigue aplicando sobre los 100 podcasts. No sustituye al campo de texto.
 
@@ -92,20 +102,29 @@ La frontera entre Context y TanStack Query es deliberada. Context guarda lo que 
 
 ## Componentes
 
-| Componente                        | Por qué existe aparte                                                     |
+Organización por pantalla bajo `src/components/`. Cada fila indica el grupo (`catalog`, `podcast`, …).
+
+| Grupo / componente                | Por qué existe aparte                                                     |
 | --------------------------------- | ------------------------------------------------------------------------- |
-| `HomeCatalog`                     | Orquesta datos, filtro y grid. No pinta el input ni el select.            |
-| `CatalogSearchInput`              | Un solo trabajo: avisar el texto escrito.                                 |
-| `CatalogGenreSelect`              | Un solo trabajo: ofrecer `All genres` y avisar el género.                 |
-| `PodcastCard`                     | La unidad repetida del grid (imagen, título, autor, enlace).              |
-| `PodcastSidebar`                  | La ficha izquierda se repite en podcast y en episodio.                    |
-| `PodcastDetailView`               | Tabla y lista móvil de episodios.                                         |
-| `EpisodeDetailView`               | Título, descripción y `<audio>`.                                          |
-| `AppHeader`                       | Logo a inicio, spinner y toggle de tema.                                  |
-| `ThemeToggle`                     | Alterna claro y oscuro. Solo cambia la clase `dark`.                      |
-| `Spinner`                         | El indicador de carga, independiente de dónde se coloque.                 |
-| `LoadError`                       | El fallo de red se muestra en la vista, con reintento, y no en `console`. |
-| `RichDescription` / `EpisodeHtml` | Texto de ficha frente a HTML saneado del episodio.                        |
+| **catalog** `HomeCatalog`         | Orquesta datos, filtro, toolbar y grid.                                   |
+| **catalog** `CatalogToolbar`      | Badge, género y búsqueda en una sola barra.                               |
+| **catalog** `CatalogGrid`         | Esqueleto, tarjetas y mensaje de vacío.                                   |
+| **catalog** `CatalogSearchInput`  | Un solo trabajo: avisar el texto escrito.                                 |
+| **catalog** `CatalogGenreSelect`  | Un solo trabajo: ofrecer `All genres` y avisar el género.                 |
+| **catalog** `PodcastCard`         | La unidad repetida del grid (imagen, título, autor, enlace).              |
+| **podcast** `PodcastDetailView`   | Orquesta carga, error y ficha con lista de episodios.                     |
+| **podcast** `EpisodePanel`        | Cabecera, lista móvil y tabla de episodios.                               |
+| **podcast** `PodcastSidebar`      | La columna izquierda de la ficha.                                         |
+| **episode** `EpisodeDetailView`   | Orquesta carga, error y ficha con el episodio.                            |
+| **episode** `EpisodeArticle`      | Título, descripción saneada y `<audio>`.                                  |
+| **episode** `EpisodeHtml`         | Adaptador de descripción de episodio sobre `RichDescription`.             |
+| **layout** `AppHeader`            | Logo a inicio, spinner y toggle de tema.                                  |
+| **layout** `ThemeToggle`          | Alterna claro y oscuro. Solo cambia la clase `dark`.                      |
+| **layout** `Spinner`              | El indicador de carga, independiente de dónde se coloque.                 |
+| **shared** `DetailLayout`         | `section` de ficha con sidebar y hueco para el contenido principal.       |
+| **shared** `DetailSkeleton`       | Placeholder de carga compartido entre podcast y episodio.                 |
+| **shared** `LoadError`            | El fallo de red se muestra en la vista, con reintento, y no en `console`. |
+| **shared** `RichDescription`      | Texto de ficha con HTML permitido.                                        |
 
 ## Caché
 

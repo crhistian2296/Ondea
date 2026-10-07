@@ -1,0 +1,5 @@
+.skeleton {
+  border-radius: var(--radius-md);
+  background: var(--color-muted);
+  animation: skeleton-pulse 2s ease-in-out infinite;
+}
