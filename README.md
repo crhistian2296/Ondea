@@ -98,39 +98,39 @@ La frontera entre Context y TanStack Query es deliberada. Context guarda lo que 
 
 **Apariencia.** El tema claro es la referencia: fondo gris, cabecera blanca, enlace azul, badge rojo y tarjetas blancas con la imagen circular superpuesta. El tema oscuro reinterpreta esos mismos papeles (azul de enlace, rojo de badge, tarjetas sobre fondo oscuro) sin cambiar la estructura. Los dos viven en variables CSS (`src/styles/tokens.css`); los componentes no repiten hexadecimales. El toggle usa iconos de `lucide-react` y guarda la elección en `localStorage`. Por defecto se muestra el tema claro.
 
-**HTML de episodios.** La descripción puede traer markup. Se sanea con una allowlist (sin jsdom) antes de pintarla para no ejecutar lo que venga en el feed.
+**HTML de episodios.** La descripción puede traer markup. Se sanea con una allowlist (sin jsdom) antes de pintarla para no ejecutar posibles scripts que pueda traer esa descripción del servidor.
 
 ## Componentes
 
 Organización por pantalla bajo `src/components/`. Cada fila indica el grupo (`catalog`, `podcast`, …).
 
-| Grupo / componente                | Por qué existe aparte                                                     |
-| --------------------------------- | ------------------------------------------------------------------------- |
-| **catalog** `HomeCatalog`         | Orquesta datos, filtro, toolbar y grid.                                   |
-| **catalog** `CatalogToolbar`      | Badge, género y búsqueda en una sola barra.                               |
-| **catalog** `CatalogGrid`         | Esqueleto, tarjetas y mensaje de vacío.                                   |
-| **catalog** `CatalogSearchInput`  | Un solo trabajo: avisar el texto escrito.                                 |
-| **catalog** `CatalogGenreSelect`  | Un solo trabajo: ofrecer `All genres` y avisar el género.                 |
-| **catalog** `PodcastCard`         | La unidad repetida del grid (imagen, título, autor, enlace).              |
-| **podcast** `PodcastDetailView`   | Orquesta carga, error y ficha con lista de episodios.                     |
-| **podcast** `EpisodePanel`        | Cabecera, lista móvil y tabla de episodios.                               |
-| **podcast** `PodcastSidebar`      | La columna izquierda de la ficha.                                         |
-| **episode** `EpisodeDetailView`   | Orquesta carga, error y ficha con el episodio.                            |
-| **episode** `EpisodeArticle`      | Título, descripción saneada y `<audio>`.                                  |
-| **episode** `EpisodeHtml`         | Adaptador de descripción de episodio sobre `RichDescription`.             |
-| **layout** `AppHeader`            | Logo a inicio, spinner y toggle de tema.                                  |
-| **layout** `ThemeToggle`          | Alterna claro y oscuro. Solo cambia la clase `dark`.                      |
-| **layout** `Spinner`              | El indicador de carga, independiente de dónde se coloque.                 |
-| **shared** `DetailLayout`         | `section` de ficha con sidebar y hueco para el contenido principal.       |
-| **shared** `DetailSkeleton`       | Placeholder de carga compartido entre podcast y episodio.                 |
-| **shared** `LoadError`            | El fallo de red se muestra en la vista, con reintento, y no en `console`. |
-| **shared** `RichDescription`      | Texto de ficha con HTML permitido.                                        |
+| Grupo   | Componente           | Función                                                                   |
+| ------- | -------------------- | ------------------------------------------------------------------------- |
+| catalog | `HomeCatalog`        | Orquesta datos, filtro, toolbar y grid.                                   |
+|         | `CatalogToolbar`     | Badge, género y búsqueda en una sola barra.                               |
+|         | `CatalogGrid`        | Esqueleto, tarjetas y mensaje de vacío.                                   |
+|         | `CatalogSearchInput` | Un solo trabajo: avisar el texto escrito.                                 |
+|         | `CatalogGenreSelect` | Un solo trabajo: ofrecer `All genres` y avisar el género.                 |
+|         | `PodcastCard`        | La unidad repetida del grid (imagen, título, autor, enlace).              |
+| podcast | `PodcastDetailView`  | Orquesta carga, error y ficha con lista de episodios.                     |
+|         | `EpisodePanel`       | Cabecera, lista móvil y tabla de episodios.                               |
+|         | `PodcastSidebar`     | La columna izquierda de la ficha.                                         |
+| episode | `EpisodeDetailView`  | Orquesta carga, error y ficha con el episodio.                            |
+|         | `EpisodeArticle`     | Título, descripción saneada y `<audio>`.                                  |
+|         | `EpisodeHtml`        | Adaptador de descripción de episodio sobre `RichDescription`.             |
+| layout  | `AppHeader`          | Logo a inicio, spinner y toggle de tema.                                  |
+|         | `ThemeToggle`        | Alterna claro y oscuro. Solo cambia la clase `dark`.                      |
+|         | `Spinner`            | El indicador de carga, independiente de dónde se coloque.                 |
+| shared  | `DetailLayout`       | `section` de ficha con sidebar y hueco para el contenido principal.       |
+|         | `DetailSkeleton`     | Placeholder de carga compartido entre podcast y episodio.                 |
+|         | `LoadError`          | El fallo de red se muestra en la vista, con reintento, y no en `console`. |
+|         | `RichDescription`    | Texto de ficha con HTML permitido.                                        |
 
 ## Caché
 
 Hay dos sitios y un mismo plazo de 24 horas (`DAY_MS` / `DAY_SECONDS` en `revalidate`).
 
-1. **Cliente.** TanStack Query marca listado (`["podcasts"]`) y detalle (`["podcast", id]`) como frescos durante 24 h, sin refetch al enfocar la ventana. `PersistQueryClientProvider` copia esa caché a `localStorage` (`ondea-query-cache`, `maxAge` 24 h). Volver a un podcast ya abierto no espera a la red.
+1. **Cliente.** TanStack Query marca listado (`["podcasts"]`) y detalle (`["podcast", id]`) como frescos durante 24 h, sin refetch al enfocar la ventana. `PersistQueryClientProvider` copia esa caché a `localStorage` (`ondea-query-cache`, `maxAge` 24 h). Volver a un podcast ya abierto no necesita esperar a la red.
 2. **Servidor.** `fetch` de Next revalida la respuesta de iTunes a las 24 h. El HTML de la primera visita y los refetch del proxy reutilizan esa copia.
 
 Qué se gana: ahorrar llamadas a una API pública que puede tener un numero finito de peticiones al mes, vuelta instantánea a un podcast ya visto, y un primer render con datos sin un spinner obligatorio.
@@ -188,3 +188,19 @@ pnpm format
 Commits en [Conventional Commits](https://www.conventionalcommits.org/): `feat` para comportamiento nuevo, `fix` para correcciones, `refactor` para cambios sin cambio de comportamiento, `test` y `docs` para lo que dicen. El asunto va en imperativo y el cuerpo, si hace falta, explica el porqué.
 
 Ramas: `feat/…` y `fix/…` salen de `main`. El trabajo se integra con pull request cuando hay remoto.
+
+## Compatibilidad
+
+La aplicación es totalmente responsiva: se puede ver en móvil, tablet, PC y televisores.
+
+Contempla el uso desde Google Chrome, Mozilla Firefox, Brave y Safari en sus versiones más recientes.
+
+## Accesibilidad
+
+Se ha contemplado textos alternativos en las imagenes de cada podcast.
+
+## Despliegue
+
+El servicio de despliegue es [Vercel](https://vercel.com/crhistian2296s-projects/ondea)
+
+La aplicación en producción está en [https://ondea-podcasts.vercel.app/](https://ondea-podcasts.vercel.app/)
