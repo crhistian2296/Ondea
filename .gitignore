@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/src/test/test-results/
+/src/test/test-e2e-results/
 
 # next.js
 /.next/
@@ -35,6 +37,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+# cursor
+.cursor/
 
 # typescript
 *.tsbuildinfo

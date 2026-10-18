@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { fixturePodcast } from "@/test/fixtures";
-import HomePage from "./page";
+import HomePage from "@/app/page";
 
 const { loadPodcasts, HomeCatalogMock } = vi.hoisted(() => ({
   loadPodcasts: vi.fn(),

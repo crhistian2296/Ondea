@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { HTTP_BAD_GATEWAY, fixtureRssFeed } from "@/lib";
+import { HTTP_BAD_GATEWAY } from "@/lib";
+import { fixtureRssFeed } from "@/test/fixtures";
 
 const fetchExternalJson = vi.fn();
 

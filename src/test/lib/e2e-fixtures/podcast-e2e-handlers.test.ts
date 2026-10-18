@@ -5,13 +5,13 @@ import {
   fixturePodcast,
   fixturePodcastDetail,
   fixtureRssFeed,
-} from "@/lib/fixtures";
+} from "@/test/fixtures";
 import {
   loadPodcastDetailE2E,
   loadPodcastsE2E,
   podcastLookupApiE2E,
   podcastsListApiE2E,
-} from "./podcast-e2e-handlers";
+} from "@/lib/e2e-fixtures/podcast-e2e-handlers";
 
 const E2E_ENV_KEYS = [
   "ONDEA_E2E_FIXTURES_FAIL",

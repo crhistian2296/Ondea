@@ -30,14 +30,6 @@ export {
 } from "./description-html/description-html";
 export { enrichPodcastDetail } from "./enrich-podcast-detail/enrich-podcast-detail";
 export { fetchExternalJson } from "./fetch-external/fetch-external";
-export {
-  fixtureEpisode,
-  fixtureLookupResponse,
-  fixturePodcast,
-  fixturePodcastDetail,
-  fixturePodcastTwo,
-  fixtureRssFeed,
-} from "./fixtures";
 export { formatDate, formatDuration } from "./format/format";
 export { loadPodcastDetail, loadPodcasts } from "./load-podcasts/load-podcasts";
 export { mapLookup, mapRssFeed } from "./mappers/mappers";

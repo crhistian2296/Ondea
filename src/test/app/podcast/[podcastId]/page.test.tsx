@@ -4,7 +4,7 @@ import {
   fixturePodcast,
   fixturePodcastDetail,
 } from "@/test/fixtures";
-import PodcastPage from "./page";
+import PodcastPage from "@/app/podcast/[podcastId]/page";
 
 const { loadPodcasts, loadPodcastDetail, PodcastDetailViewMock } = vi.hoisted(
   () => ({

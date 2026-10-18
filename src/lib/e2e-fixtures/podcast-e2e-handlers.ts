@@ -9,7 +9,7 @@ import {
   fixturePodcast,
   fixturePodcastDetail,
   fixtureRssFeed,
-} from "@/lib/fixtures";
+} from "@/test/fixtures";
 import { mapRssFeed } from "@/lib/mappers/mappers";
 import type { Podcast, PodcastDetail } from "@/lib/types";
 
