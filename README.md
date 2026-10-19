@@ -32,7 +32,7 @@ Catálogo interactivo de los **100 podcasts musicales más populares de Apple**.
 | **TanStack Query v5**         | Caché asíncrona en cliente, deduplicación, reintentos y persistencia en `localStorage`                 |
 | **CSS propio (Tokens + BEM)** | Variables CSS, nomenclatura BEM y _media queries_, sin librerías de componentes externas               |
 | **Vitest + Testing Library**  | Tests unitarios y de integración de dominio, hooks, contextos, componentes y rutas en `src/test/`      |
-| **Playwright**                | Tests _end-to-end_ deterministas (éxito y fallo de red) en `src/test/e2e/` y `e2e/`                    |
+| **Playwright**                | Tests _end-to-end_ deterministas (éxito y fallo de red) en `src/test/e2e/`                             |
 | **ESLint 9 + Prettier**       | Cero alertas de lint y formato de código uniforme                                                      |
 
 Turbopack cumple el papel de empaquetador: en `pnpm dev` los _assets_ se sirven sin minificar (con recarga en caliente); `pnpm build` los concatena, optimiza y minifica para producción, y `pnpm start` sirve ese artefacto.
@@ -88,37 +88,46 @@ src/
 │   ├── podcast/[podcastId]/    # Rutas dinámicas de ficha de podcast y de episodio
 │   ├── layout.tsx              # RootLayout (fuentes, ThemeScript, Providers, AppHeader, PageTransition)
 │   └── page.tsx                # Ruta raíz (/) con precarga SSR del catálogo
-├── components/                 # Capa de presentación (UI dividida por dominio funcional)
-│   ├── catalog/                # HomeCatalog, CatalogToolbar, CatalogGrid, SearchInput, GenreSelect, PodcastCard
-│   ├── podcast/                # PodcastDetailView, PodcastSidebar, EpisodePanel
-│   ├── episode/                # EpisodeDetailView, EpisodeArticle, EpisodeHtml
-│   ├── layout/                 # AppHeader, Providers, PageTransition, ThemeScript, ThemeToggle, Spinner
-│   ├── shared/                 # DetailLayout, DetailSkeleton, LoadError, RichDescription
+├── components/                 # Capa de presentación (archivos directos por grupo funcional + index.ts)
+│   ├── catalog/                # home-catalog, catalog-toolbar, catalog-grid, catalog-search-input, catalog-genre-select, podcast-card
+│   ├── podcast/                # podcast-detail-view, podcast-sidebar, episode-panel
+│   ├── episode/                # episode-detail-view, episode-article, episode-html
+│   ├── layout/                 # app-header, providers, page-transition, theme-script, theme-toggle, spinner
+│   ├── shared/                 # detail-layout, detail-skeleton, load-error, rich-description
 │   └── index.ts                # Barrel raíz consumido por src/app
 ├── hooks/                      # Capa de acceso a datos en cliente y efectos de navegación
-│   ├── use-podcasts/           # Query del listado de podcasts (["podcasts"])
-│   ├── use-podcast-detail/     # Query del detalle (["podcast", id]) + enriquecimiento con catálogo
-│   └── use-route-transition-feedback/ # Detección de clics en enlaces internos para feedback visual
+│   ├── use-podcasts.ts         # Query del listado de podcasts (["podcasts"])
+│   ├── use-podcast-detail.ts   # Query del detalle (["podcast", id]) + enriquecimiento con catálogo
+│   ├── use-route-transition-feedback.ts # Detección de clics en enlaces internos para feedback visual
+│   └── index.ts                # Barrel de hooks
 ├── context/                    # Capa de estado de interfaz (React Context API)
-│   ├── catalog-context/        # Estado de búsqueda (search) y filtro de género (genre)
-│   ├── navigation-context/     # Estado booleano de transición entre rutas (isNavigating)
-│   └── theme-context/          # Estado y persistencia del tema claro/oscuro (light | dark)
+│   ├── catalog-context.tsx     # Estado de búsqueda (search) y filtro de género (genre)
+│   ├── navigation-context.tsx  # Estado booleano de transición entre rutas (isNavigating)
+│   ├── theme-context.tsx       # Estado y persistencia del tema claro/oscuro (light | dark)
+│   └── index.ts                # Barrel de contextos
 ├── lib/                        # Capa de dominio y utilidades puras (0 dependencias de React)
-│   ├── cache/                  # Validación pura de vigencia de caché (isCacheFresh)
-│   ├── catalog/                # Lógica de filtrado (filterPodcasts), géneros (uniqueGenres) y paginación
-│   ├── description-html/       # Sanitizador HTML basado en allowlist (prepareRichDescriptionHtml)
-│   ├── e2e-fixtures/           # Conmutador de datos deterministas para pruebas Playwright
-│   ├── enrich-podcast-detail/  # Cruce de metadatos entre el catálogo RSS y el lookup del podcast
-│   ├── fetch-external/         # Cliente HTTP con revalidación de 24 h y fallback a AllOrigins
-│   ├── format/                 # Formateadores puros de fechas (formatDate) y duraciones (formatDuration)
-│   ├── load-podcasts/          # Casos de uso de carga en servidor (loadPodcasts, loadPodcastDetail)
-│   ├── mappers/                # Adaptadores de contratos crudos de iTunes a entidades de dominio
-│   ├── pagination-window/      # Cálculo de ventana deslizante de paginación (getPaginationWindow)
-│   ├── query-client/           # Configuración de QueryClient y persister en localStorage
+│   ├── cache.ts                # Validación pura de vigencia de caché (isCacheFresh)
+│   ├── catalog.ts              # Lógica de filtrado (filterPodcasts), géneros (uniqueGenres) y paginación
 │   ├── constants.ts            # Constantes de dominio, TTLs, límites y constructores de URL
-│   └── types.ts                # Contratos TypeScript de dominio y payloads de iTunes
+│   ├── description-html.ts     # Sanitizador HTML basado en allowlist (prepareRichDescriptionHtml)
+│   ├── enrich-podcast-detail.ts # Cruce de metadatos entre el catálogo RSS y el lookup del podcast
+│   ├── fetch-external.ts       # Cliente HTTP con revalidación de 24 h y fallback a AllOrigins
+│   ├── format.ts               # Formateadores puros de fechas (formatDate) y duraciones (formatDuration)
+│   ├── load-podcasts.ts        # Casos de uso de carga en servidor (loadPodcasts, loadPodcastDetail)
+│   ├── mappers.ts              # Adaptadores de contratos crudos de iTunes a entidades de dominio
+│   ├── pagination-window.ts    # Cálculo de ventana deslizante de paginación (getPaginationWindow)
+│   ├── query-client.ts         # Configuración de QueryClient y persister en localStorage
+│   ├── types.ts                # Contratos TypeScript de dominio y payloads de iTunes
+│   └── index.ts                # Barrel de dominio
 ├── styles/                     # Arquitectura CSS con variables (tokens.css) y bloques BEM por pantalla
 └── test/                       # Espejo exacto de src/ para tests unitarios, de integración y E2E
+    ├── app/                    # Tests de páginas SSR y Route Handlers
+    ├── components/             # Tests de componentes por grupo (catalog, podcast, episode, layout, shared)
+    ├── context/                # Tests de contextos (catalog, navigation, theme)
+    ├── hooks/                  # Tests de custom hooks
+    ├── lib/                    # Tests unitarios del dominio y de e2e-fixtures
+    ├── e2e/                    # Especificaciones Playwright (catalog, navigation, theme, error)
+    └── e2e-fixtures/           # Conmutador y handlers de datos deterministas para Playwright
 ```
 
 ### Diagrama de arquitectura por capas
@@ -168,35 +177,23 @@ flowchart TB
 La arquitectura del proyecto se ha diseñado aplicando los cinco principios **SOLID** adaptados al ecosistema de React 19, Next.js App Router y TypeScript:
 
 ```mermaid
-mindmap
-  root((Principios SOLID<br/>en Ondea))
-    S - Single Responsibility
-      Dominio puro sin React en src/lib
-      Mappers aislados del transporte HTTP
-      Inputs tontos separados de las vistas
-    O - Open / Closed
-      DetailLayout extensible vía children
-      RichDescription + EpisodeHtml
-      withE2EFixturesElse sin tocar páginas
-    L - Liskov Substitution
-      Mismo contrato Podcast / PodcastDetail en SSR, Cliente y E2E
-      Fallback transparente entre iTunes y AllOrigins
-    I - Interface Segregation
-      3 contextos independientes en vez de un store gigante
-      Props mínimas por componente
-      Barrels index.ts acotados por módulo
-    D - Dependency Inversion
-      Vistas dependen de hooks y tipos de dominio
-      UI desacoplada del esquema JSON de Apple
+flowchart LR
+    SOLID(["Principios SOLID<br/>en Ondea"])
+
+    SOLID --> S["<b>S — Single Responsibility</b><br/>• Dominio puro sin React en src/lib<br/>• Mappers aislados del transporte HTTP<br/>• Inputs controlados separados de las vistas"]
+    SOLID --> O["<b>O — Open / Closed</b><br/>• DetailLayout extensible vía children<br/>• RichDescription + adaptador EpisodeHtml<br/>• withE2EFixturesElse sin tocar páginas"]
+    SOLID --> L["<b>L — Liskov Substitution</b><br/>• Mismo contrato Podcast / PodcastDetail<br/>en SSR, Cliente y E2E<br/>• Fallback transparente iTunes ↔ AllOrigins"]
+    SOLID --> I["<b>I — Interface Segregation</b><br/>• 3 contextos independientes en vez de un store único<br/>• Props mínimas por componente<br/>• Barrels index.ts acotados por módulo"]
+    SOLID --> D["<b>D — Dependency Inversion</b><br/>• Vistas dependen de hooks y tipos de dominio<br/>• UI desacoplada del esquema JSON de Apple"]
 ```
 
 ### 1. S — Single Responsibility Principle (Responsabilidad Única)
 
 Cada módulo, hook o componente tiene **una única razón para cambiar**:
 
-- **Transformación de datos (`src/lib/mappers/mappers.ts`)**: `mapRssFeed` y `mapLookup` solo saben convertir el esquema propietario de Apple (`im:name`, `im:artist`, `wrapperType`) a las entidades limpias `Podcast`, `Episode` y `PodcastDetail`. Si Apple cambia su JSON, solo cambia este archivo.
-- **Transporte y resiliencia (`src/lib/fetch-external/fetch-external.ts`)**: `fetchExternalJson` solo gestiona la petición HTTP, la política de revalidación (`DAY_SECONDS`) y el reintento mediante el proxy de respaldo (`allorigins`). No conoce qué tipo de datos transporta.
-- **Saneado de seguridad (`src/lib/description-html/description-html.ts`)**: `prepareRichDescriptionHtml` se encarga exclusivamente de limpiar etiquetas peligrosas (`<script>`, `<style>`, atributos `on*`) y validar URLs seguras en enlaces.
+- **Transformación de datos (`src/lib/mappers.ts`)**: `mapRssFeed` y `mapLookup` solo saben convertir el esquema propietario de Apple (`im:name`, `im:artist`, `wrapperType`) a las entidades limpias `Podcast`, `Episode` y `PodcastDetail`. Si Apple cambia su JSON, solo cambia este archivo.
+- **Transporte y resiliencia (`src/lib/fetch-external.ts`)**: `fetchExternalJson` solo gestiona la petición HTTP, la política de revalidación (`DAY_SECONDS`) y el reintento mediante el proxy de respaldo (`allorigins`). No conoce qué tipo de datos transporta.
+- **Saneado de seguridad (`src/lib/description-html.ts`)**: `prepareRichDescriptionHtml` se encarga exclusivamente de limpiar etiquetas peligrosas (`<script>`, `<style>`, atributos `on*`) y validar URLs seguras en enlaces.
 - **Controles de formulario puros (`CatalogSearchInput`, `CatalogGenreSelect`)**: solo pintan un `<input>` o `<select>` y notifican el cambio mediante un _callback_. No leen contextos ni filtran arrays.
 
 ### 2. O — Open/Closed Principle (Abierto a extensión, cerrado a modificación)
@@ -311,7 +308,7 @@ La aplicación separa de forma estricta el **estado de servidor** (gestionado po
 
 ### Jerarquía de Providers en `RootLayout`
 
-En `src/components/layout/providers/providers.tsx` se compone el árbol de proveedores que envuelve toda la aplicación:
+En `src/components/layout/providers.tsx` se compone el árbol de proveedores que envuelve toda la aplicación:
 
 ```mermaid
 flowchart TB
@@ -326,13 +323,13 @@ flowchart TB
 
 ### Detalle de los tres Contextos de la aplicación
 
-#### 1. `CatalogContext` (`src/context/catalog-context/catalog-context.tsx`)
+#### 1. `CatalogContext` (`src/context/catalog-context.tsx`)
 
 - **Qué almacena**: `search: string` (texto de búsqueda por título o autor) y `genre: string` (género seleccionado, por defecto `"all"`).
 - **Por qué vive en un Context global**: al estar montado en `Providers` (por encima de las páginas), si el usuario filtra el catálogo en `/`, entra en `/podcast/123` y pulsa el botón "Atrás" del navegador, su búsqueda y filtro de género siguen intactos sin necesidad de ensuciar la URL ni volver a pedir datos.
 - **Optimización**: los _setters_ `setSearch` y `setGenre` están estabilizados con `useCallback` y el valor del contexto con `useMemo`.
 
-#### 2. `NavigationContext` (`src/context/navigation-context/navigation-context.tsx`)
+#### 2. `NavigationContext` (`src/context/navigation-context.tsx`)
 
 - **Qué almacena**: `isNavigating: boolean` y `setNavigating`.
 - **Cómo se coordina con la navegación y con las peticiones asíncronas**:
@@ -356,7 +353,7 @@ const showSpinner = isNavigating || isFetching;
 
 Así, el `<Spinner />` de la esquina superior derecha informa tanto de las transiciones de ruta como de cualquier descarga de datos en segundo plano.
 
-#### 3. `ThemeContext` (`src/context/theme-context/theme-context.tsx`)
+#### 3. `ThemeContext` (`src/context/theme-context.tsx`)
 
 - **Qué almacena**: `theme: "light" | "dark"`, `setTheme` y `toggleTheme`.
 - **Sincronización sin parpadeo (Zero-FOUC)**:
@@ -365,7 +362,7 @@ Así, el `<Spinner />` de la esquina superior derecha informa tanto de las trans
 
 ### Frontera entre React Context y TanStack Query
 
-| Dimensión                 | React Context (`src/context`)                                                                                                                              | TanStack Query (`src/hooks` + `src/lib/query-client`)                                                |
+| Dimensión                 | React Context (`src/context`)                                                                                                                              | TanStack Query (`src/hooks` + `src/lib/query-client.ts`)                                             |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | **Naturaleza del dato**   | Estado de interfaz síncrono originado por el usuario                                                                                                       | Estado asíncrono remoto originado en Apple iTunes                                                    |
 | **Ejemplos en Ondea**     | `search`, `genre`, `isNavigating`, `theme`                                                                                                                 | Catálogo `["podcasts"]`, Ficha `["podcast", podcastId]`                                              |
@@ -396,7 +393,7 @@ flowchart LR
 1. **Cliente**: TanStack Query marca el listado (`["podcasts"]`) y cada detalle (`["podcast", id]`) como frescos durante 24 horas (`staleTime: DAY_MS`, `gcTime: DAY_MS`), desactivando el refetch al cambiar de pestaña (`refetchOnWindowFocus: false`). `PersistQueryClientProvider` serializa esa caché en `localStorage` bajo la clave `ondea-query-cache` con `maxAge: 24 h`. Volver a abrir un podcast ya visitado es instantáneo y no realiza peticiones de red.
 2. **Servidor**: el `fetch` de Next.js en `fetchExternalJson` incluye `{ next: { revalidate: DAY_SECONDS } }`. Tanto el renderizado SSR de la primera visita como las llamadas a `/api/podcasts*` reutilizan la copia cacheada en el servidor durante 24 horas.
 3. **Invalidación por versión (`buster: "ondea-v4"`)**: invalida de golpe las copias antiguas almacenadas en el `localStorage` de los usuarios cuando cambia el contrato de los datos guardados, sin requerir que el usuario borre los datos del navegador manualmente.
-4. **Regla de dominio (`isCacheFresh`)**: en `src/lib/cache/cache.ts`, `isCacheFresh(timestamp, now, ttl)` modela la regla matemática del TTL de 24 horas y está cubierta por tests unitarios.
+4. **Regla de dominio (`isCacheFresh`)**: en `src/lib/cache.ts`, `isCacheFresh(timestamp, now, ttl)` modela la regla matemática del TTL de 24 horas y está cubierta por tests unitarios.
 
 ---
 
@@ -406,7 +403,7 @@ flowchart LR
 - **Proxy en el cliente, fetch directo en el servidor**: cuando el navegador necesita pedir datos en cliente, llama a `/api/podcasts`, donde el problema de CORS con iTunes ya está resuelto. En cambio, durante el renderizado en servidor, Next.js llama directamente a iTunes (o al _fallback_ de AllOrigins) sin dar una vuelta HTTP innecesaria contra sí mismo.
 - **Controles controlados y tontos**: `CatalogSearchInput` y `CatalogGenreSelect` no importan ni leen ningún contexto. Reciben `value` y un _callback_ (`onSearch`, `onGenreChange`). `HomeCatalog` es quien conecta `useCatalog()`, `filterPodcasts()`, `CatalogToolbar` y `CatalogGrid`. Así cada control se prueba de forma aislada sin montar _providers_, y cambiar la fuente del estado no obliga a modificar los inputs.
 - **Filtro de género como extensión natural**: además del filtrado en vivo por título y autor, se incorpora un selector de género (`uniqueGenres`). Con el valor `"all"` por defecto, el filtro de texto actúa sobre los 100 podcasts; al elegir un género, ambos criterios se intersectan en tiempo real.
-- **Listado y episodios completos en vista**: el filtro recorre todo el catálogo y la tabla muestra todos los episodios del podcast. El contador del _badge_ refleja el total de resultados filtrados. En `src/lib/pagination-window/pagination-window.ts` (`getPaginationWindow`) y `src/lib/catalog/catalog.ts` (`paginate`) se mantienen utilidades puras de paginación cubiertas por tests unitarios, aunque en la interfaz se priorizó mostrar el listado continuo para ofrecer un filtrado inmediato sin saltos de página.
+- **Listado y episodios completos en vista**: el filtro recorre todo el catálogo y la tabla muestra todos los episodios del podcast. El contador del _badge_ refleja el total de resultados filtrados. En `src/lib/pagination-window.ts` (`getPaginationWindow`) y `src/lib/catalog.ts` (`paginate`) se mantienen utilidades puras de paginación cubiertas por tests unitarios, aunque en la interfaz se priorizó mostrar el listado continuo para ofrecer un filtrado inmediato sin saltos de página.
 - **Navegación cruzada en la ficha**: en la barra lateral (`PodcastSidebar`), tanto la imagen como el título y el autor enlazan a `/podcast/{id}`, permitiendo regresar fácilmente desde la vista de reproducción de un episodio hacia el listado de episodios del podcast.
 - **Sistema de diseño y temas (Claro / Oscuro)**: el tema claro actúa como referencia visual (fondo gris suave, cabecera blanca, acentos azules, _badge_ y tarjetas blancas con carátula circular superpuesta). El tema oscuro adapta los mismos roles semánticos en `src/styles/tokens.css` sin duplicar reglas ni usar colores hexadecimales sueltos en los componentes.
 - **Saneado de HTML sin `jsdom`**: las descripciones de los episodios suelen incluir HTML enriquecido. En lugar de usar `jsdom` o `DOMPurify` en servidor (que generan incompatibilidades ESM/CommonJS en entornos _serverless_), `prepareRichDescriptionHtml` aplica un sanitizador propio basado en _allowlist_ (`a`, `b`, `br`, `em`, `i`, `li`, `ol`, `p`, `span`, `strong`, `ul`), elimina bloques `<script>`/`<style>` y eventos inline `on*`, y restringe los atributos `href` únicamente a esquemas `http://` o `https://` con `target="_blank" rel="noopener noreferrer"`.
@@ -455,11 +452,11 @@ pnpm test:run      # Ejecución completa en una sola pasada
 pnpm test:coverage # Informe de cobertura con umbral mínimo exigido del 80 %
 ```
 
-Los tests viven bajo `src/test/` replicando la estructura exacta de `src/` (`src/test/app/`, `src/test/components/`, `src/test/context/`, `src/test/hooks/`, `src/test/lib/`), además de los tests coubicados junto a sus módulos. Cubren:
+Los tests viven centralizados bajo `src/test/` replicando la estructura exacta de `src/` (`src/test/app/`, `src/test/components/`, `src/test/context/`, `src/test/hooks/`, `src/test/lib/`), sin carpetas intermedias de un solo archivo:
 
-- **Dominio puro (`src/lib`)**: filtrado por título/autor/género, _mappers_ de RSS y Lookup, enriquecimiento de detalle, sanitización de HTML (prevención de XSS), formateo de fechas y duraciones, cálculo de ventana de paginación y cliente HTTP con _fallback_.
-- **Contextos y Hooks (`src/context`, `src/hooks`)**: transiciones de estado en `CatalogContext`, `NavigationContext`, `ThemeContext` y comportamiento de caché/enriquecimiento en `usePodcasts` y `usePodcastDetail`.
-- **Componentes y Páginas (`src/components`, `src/app`)**: renderizado de vistas completas con `renderWithProviders`, controles aislados del _toolbar_ y _Route Handlers_ de la API (`/api/podcasts` y `/api/podcasts/[podcastId]`).
+- **Dominio puro (`src/test/lib/`)**: filtrado por título/autor/género (`catalog.test.ts`), _mappers_ de RSS y Lookup (`mappers.test.ts`), enriquecimiento de detalle (`enrich-podcast-detail.test.ts`), sanitización de HTML (`description-html.test.ts`), formateo (`format.test.ts`), ventana de paginación (`pagination-window.test.ts`), caché (`cache.test.ts`), `query-client.test.ts`, carga SSR (`load-podcasts.test.ts`), cliente HTTP con _fallback_ (`fetch-external.test.ts`) y _handlers_ E2E (`src/test/lib/e2e-fixtures/`).
+- **Contextos y Hooks (`src/test/context/`, `src/test/hooks/`)**: transiciones de estado en `catalog-context.test.tsx`, `navigation-context.test.tsx`, `theme-context.test.tsx` y comportamiento de caché/enriquecimiento en `use-podcasts.test.tsx`, `use-podcast-detail.test.tsx` y `use-route-transition-feedback.test.tsx`.
+- **Componentes y Páginas (`src/test/components/`, `src/test/app/`)**: renderizado de vistas y controles agrupados por dominio (`catalog/`, `podcast/`, `episode/`, `layout/`, `shared/`) con `renderWithProviders`, además de las páginas SSR y _Route Handlers_ de la API (`/api/podcasts` y `/api/podcasts/[podcastId]`).
 
 ### 2. Tests End-to-End (Playwright)
 
