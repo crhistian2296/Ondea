@@ -2,7 +2,7 @@ import { PodcastDetailView } from "@/components";
 import {
   loadPodcastDetail,
   loadPodcasts,
-} from "@/lib/load-podcasts/load-podcasts";
+} from "@/lib/load-podcasts";
 
 export default async function PodcastPage({
   params,

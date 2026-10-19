@@ -18,7 +18,7 @@ const { loadPodcasts, loadPodcastDetail, EpisodeDetailViewMock } = vi.hoisted(
   }),
 );
 
-vi.mock("@/lib/load-podcasts/load-podcasts", () => ({
+vi.mock("@/lib/load-podcasts", () => ({
   loadPodcasts,
   loadPodcastDetail,
 }));

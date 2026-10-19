@@ -1,22 +1,19 @@
-import { afterEach, describe, expect, it } from "vitest";
 import { HTTP_BAD_GATEWAY } from "@/lib/constants";
+import {
+  loadPodcastDetailE2E,
+  loadPodcastsE2E,
+  podcastLookupApiE2E,
+  podcastsListApiE2E,
+} from "@/test/e2e-fixtures/podcast-e2e-handlers";
 import {
   fixtureLookupResponse,
   fixturePodcast,
   fixturePodcastDetail,
   fixtureRssFeed,
 } from "@/test/fixtures";
-import {
-  loadPodcastDetailE2E,
-  loadPodcastsE2E,
-  podcastLookupApiE2E,
-  podcastsListApiE2E,
-} from "@/lib/e2e-fixtures/podcast-e2e-handlers";
+import { afterEach, describe, expect, it } from "vitest";
 
-const E2E_ENV_KEYS = [
-  "ONDEA_E2E_FIXTURES_FAIL",
-  "ONDEA_E2E_API_FAIL",
-] as const;
+const E2E_ENV_KEYS = ["ONDEA_E2E_FIXTURES_FAIL", "ONDEA_E2E_API_FAIL"] as const;
 
 afterEach(() => {
   for (const key of E2E_ENV_KEYS) {
@@ -48,9 +45,9 @@ describe("loadPodcastDetailE2E", () => {
 
   it("throws when fail mode is enabled", () => {
     process.env.ONDEA_E2E_FIXTURES_FAIL = "1";
-    expect(() =>
-      loadPodcastDetailE2E(fixturePodcastDetail.podcast.id),
-    ).toThrow(/fixtures fail/i);
+    expect(() => loadPodcastDetailE2E(fixturePodcastDetail.podcast.id)).toThrow(
+      /fixtures fail/i,
+    );
   });
 });
 

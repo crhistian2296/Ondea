@@ -4,7 +4,7 @@ import { fixtureRssFeed } from "@/test/fixtures";
 
 const fetchExternalJson = vi.fn();
 
-vi.mock("@/lib/fetch-external/fetch-external", () => ({
+vi.mock("@/lib/fetch-external", () => ({
   fetchExternalJson: (...args: unknown[]) => fetchExternalJson(...args),
 }));
 

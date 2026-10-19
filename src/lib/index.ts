@@ -1,5 +1,5 @@
-export { isCacheFresh } from "./cache/cache";
-export { filterPodcasts, paginate, uniqueGenres } from "./catalog/catalog";
+export { isCacheFresh } from "./cache";
+export { filterPodcasts, paginate, uniqueGenres } from "./catalog";
 export {
   allOriginsUrl,
   CATALOG_SKELETON_COUNT,
@@ -27,12 +27,12 @@ export {
 export {
   hasHtmlMarkup,
   prepareRichDescriptionHtml,
-} from "./description-html/description-html";
-export { enrichPodcastDetail } from "./enrich-podcast-detail/enrich-podcast-detail";
-export { fetchExternalJson } from "./fetch-external/fetch-external";
-export { formatDate, formatDuration } from "./format/format";
-export { loadPodcastDetail, loadPodcasts } from "./load-podcasts/load-podcasts";
-export { mapLookup, mapRssFeed } from "./mappers/mappers";
-export { getPaginationWindow } from "./pagination-window/pagination-window";
-export { getQueryClient, queryPersister } from "./query-client/query-client";
+} from "./description-html";
+export { enrichPodcastDetail } from "./enrich-podcast-detail";
+export { fetchExternalJson } from "./fetch-external";
+export { formatDate, formatDuration } from "./format";
+export { loadPodcastDetail, loadPodcasts } from "./load-podcasts";
+export { mapLookup, mapRssFeed } from "./mappers";
+export { getPaginationWindow } from "./pagination-window";
+export { getQueryClient, queryPersister } from "./query-client";
 export type * from "./types";

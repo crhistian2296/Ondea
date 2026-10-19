@@ -1,5 +1,8 @@
+import {
+  isE2EFixturesMode,
+  withE2EFixturesElse,
+} from "@/test/e2e-fixtures/e2e-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
-import { isE2EFixturesMode, withE2EFixturesElse } from "@/lib/e2e-fixtures/e2e-fixtures";
 
 const E2E_ENV_KEYS = ["ONDEA_E2E_FIXTURES"] as const;
 

@@ -1,11 +1,11 @@
-export { CatalogProvider, useCatalog } from "./catalog-context/catalog-context";
+export { CatalogProvider, useCatalog } from "./catalog-context";
 export {
   NavigationProvider,
   useNavigationUi,
-} from "./navigation-context/navigation-context";
+} from "./navigation-context";
 export {
   readStoredTheme,
   ThemeProvider,
   useTheme,
-} from "./theme-context/theme-context";
-export type { Theme } from "./theme-context/theme-context";
+} from "./theme-context";
+export type { Theme } from "./theme-context";

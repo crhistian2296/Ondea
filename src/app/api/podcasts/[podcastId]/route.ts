@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
 import { HTTP_BAD_GATEWAY, itunesLookupUrl } from "@/lib/constants";
-import { withE2EFixturesElse } from "@/lib/e2e-fixtures/e2e-fixtures";
-import { podcastLookupApiE2E } from "@/lib/e2e-fixtures/podcast-e2e-handlers";
-import { fetchExternalJson } from "@/lib/fetch-external/fetch-external";
+import { fetchExternalJson } from "@/lib/fetch-external";
 import type { ItunesLookupResponse } from "@/lib/types";
+import { withE2EFixturesElse } from "@/test/e2e-fixtures/e2e-fixtures";
+import { podcastLookupApiE2E } from "@/test/e2e-fixtures/podcast-e2e-handlers";
+import { NextResponse } from "next/server";
 
 export async function GET(
   _request: Request,
